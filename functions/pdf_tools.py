@@ -71,8 +71,18 @@ def match_category(row):
     
     return match[0] if match else ''
 
+################################################################################################################
 
+def road_category(x):
+    
+    if x == 'DP':
+        x = 'Powiatowa'
+    elif x == 'DW':
+        x = 'Wojewodzka'
+    else:
+        x = 'Krajowa'
 
+    return x
 
 
 
