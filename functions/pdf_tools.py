@@ -22,6 +22,13 @@ def pdf_reader(path:str):
         for page, pdf_table in enumerate(road_data):
             report = road_data[page].df
             report_cl = report.iloc[1:]
+            
+#       Setting new column names
+            report_cl.columns = 'Lp CPV Numer_Specyfikacji_Technicznej Elementy_rozliczeniowe Jednostka Ilosc Cena_jedn Wartosc_calkowita Droga Rok Kategoria'.split()
+    
+#       Adding new column with road length, we may need it later         
+            report_cl['Dlugosc_drogi'] = report_cl[report_cl['Elementy_rozliczeniowe'].str.contains("Odtworzenie trasy i punktów wysokościowych")]['Ilosc']
+            
             all_reports_list.append(report_cl)
             
 #   Concate all single dfs to one DataFrame
@@ -32,10 +39,7 @@ def pdf_reader(path:str):
 ################################################################################################################
 
 def pdf_cleaner(df):
-    
-    # Setting new column names
-    df.columns = 'Lp CPV Numer_Specyfikacji_Technicznej Elementy_rozliczeniowe Jednostka Ilosc Cena_jedn Wartosc_calkowita Droga Rok Kategoria'.split()
-    
+        
     #Replace all blank cells with NaN
     df.ffill(axis=0,inplace=True)
     df.replace({'\n': '',
@@ -71,18 +75,6 @@ def match_category(row):
     
     return match[0] if match else ''
 
-################################################################################################################
-
-def road_category(x):
-    
-    if x == 'DP':
-        x = 'Powiatowa'
-    elif x == 'DW':
-        x = 'Wojewodzka'
-    else:
-        x = 'Krajowa'
-
-    return x
 
 
 
